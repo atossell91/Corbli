@@ -1,4 +1,6 @@
-﻿namespace Corbli.Services
+﻿using System.Text;
+
+namespace Corbli.Services
 {
     public class LoginService
     {
@@ -9,9 +11,7 @@
 
         public static bool TryLogin(string username, string password)
         {
-            var passHash = HashPassword(password);
-
-            return false;
+            throw new NotImplementedException();
         }
     }
 }
