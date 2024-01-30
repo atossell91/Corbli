@@ -9,9 +9,9 @@ builder.Services.AddControllersWithViews();
 var MySqlBuilder = new MySqlConnectionStringBuilder
 {
     Server = "localhost",
-    UserID = "root",
+    UserID = System.Environment.GetEnvironmentVariable("SQLUSR"),
     Password = System.Environment.GetEnvironmentVariable("SQLPASS"),
-    Database = "Corbli"
+    Database = "corbli"
 };
 
 //builder.Services.AddMySqlDataSource(MySqlBuilder.ConnectionString);
