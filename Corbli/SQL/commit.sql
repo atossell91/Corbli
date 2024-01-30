@@ -1,4 +1,4 @@
-USE CORBLI;
+USE corbli;
 
 START TRANSACTION;
 

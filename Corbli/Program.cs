@@ -14,7 +14,9 @@ var MySqlBuilder = new MySqlConnectionStringBuilder
     Database = "Corbli"
 };
 
-builder.Services.AddMySqlDataSource(MySqlBuilder.ConnectionString);
+//builder.Services.AddMySqlDataSource(MySqlBuilder.ConnectionString);
+builder.Services.AddScoped<MySqlDataSource>(
+    _ => new MySqlDataSource(MySqlBuilder.ConnectionString));
 
 var app = builder.Build();
 
@@ -37,8 +39,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
 
+app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

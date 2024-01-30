@@ -1,4 +1,6 @@
-﻿@{
+﻿@model List<UserRole>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -7,4 +9,8 @@
     <p>Welcome to Corbli!</p>
     <p>Corbli is in progress. There have been technical difficulties...</p>
     <p>Come back soon!</p>
+    @foreach (var ur in Model)
+    {
+        <p>@ur.Name</p>
+    }
 </div>
