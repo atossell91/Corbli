@@ -34,6 +34,9 @@
                         @if (User.Claims.Count() > 0)
                         {
                             <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Secret">Secret</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Logout</a>
                             </li>
                         }
