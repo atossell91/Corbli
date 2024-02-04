@@ -1,10 +1,20 @@
 using MySqlConnector;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
+using Corbli.Models;
+using Corbli.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddAuthentication().AddCookie("Cookies");
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("IsLoggedIn", policy => policy.RequireClaim("UserType"));
+});
 
 var MySqlBuilder = new MySqlConnectionStringBuilder
 {
@@ -17,6 +27,9 @@ var MySqlBuilder = new MySqlConnectionStringBuilder
 //builder.Services.AddMySqlDataSource(MySqlBuilder.ConnectionString);
 builder.Services.AddScoped<MySqlDataSource>(
     _ => new MySqlDataSource(MySqlBuilder.ConnectionString));
+
+builder.Services.AddScoped<UserDbService>();
+builder.Services.AddScoped<PasswordHasher<LoginModel>>();
 
 var app = builder.Build();
 
