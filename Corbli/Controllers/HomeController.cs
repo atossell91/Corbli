@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MySqlConnector;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 
 namespace Corbli.Controllers
@@ -108,6 +109,10 @@ namespace Corbli.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult WhiteBoard() {
+            return View();
         }
     }
 }

@@ -1,0 +1,172 @@
+@{
+    Layout = "";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .canvasDiv {
+            background: transparent;
+        }
+
+        .mainCanvas {
+            border-style: solid;
+        }
+
+        .buttonArea {
+            display: flexbox;
+            flex-direction: row;
+            height: 50px;
+        }
+    </style>
+
+    <script>
+        const interval = 10;
+
+        const markerSize = 4;
+        const eraserSize = 80;
+
+        //  Change to true for an uber-cool neon mode!
+        const isNeonMode = true;
+
+        const markerColourRed = isNeonMode ? "crimson" : "red";
+        const markerColourGreen = isNeonMode ? "lime" : "green";
+        const markerColourBlue = isNeonMode ? "cyan" : "blue";
+        const defaultMarkerColour = isNeonMode ? markerColourGreen : "black";
+        const boardColour = isNeonMode ? "black" : "white";
+
+        const font = "18pt courier";
+
+        let isText = false;
+
+        let canvasElem = null;
+        let drawContext = null;
+
+        let textElem = null;
+
+        let mouseBtnDown = false;
+        let mousex = 0;
+        let mousey = 0;
+        let oldMousex = 0;
+        let oldMousey = 0;
+
+        function useDefaultMarker() {
+            drawContext.strokeStyle = defaultMarkerColour;
+            drawContext.fillStyle = defaultMarkerColour;
+            drawContext.lineWidth = markerSize;
+        }
+
+        function useRedMarker() {
+            drawContext.strokeStyle = markerColourRed;
+            drawContext.fillStyle = markerColourRed;
+            drawContext.lineWidth = markerSize;
+        }
+
+        function useGreenMarker() {
+            drawContext.strokeStyle = markerColourGreen;
+            drawContext.fillStyle = markerColourGreen;
+            drawContext.lineWidth = markerSize;
+        }
+
+        function useBlueMarker() {
+            drawContext.strokeStyle = markerColourBlue;
+            drawContext.fillStyle = markerColourBlue;
+            drawContext.lineWidth = markerSize;
+        }
+
+        function useEraser() {
+            drawContext.strokeStyle = boardColour;
+            drawContext.lineWidth = eraserSize;
+        }
+
+        function drawText() {
+            drawContext.fillText(textElem.value, mousex, mousey);
+        }
+
+        function draw() {
+            if (mousex == oldMousex && mousey == oldMousey) {
+                return;
+            }
+            
+            if (mouseBtnDown & !isText) {
+                drawContext.beginPath();
+                drawContext.moveTo(oldMousex, oldMousey);
+                drawContext.lineTo(mousex, mousey);
+                //drawContext.closePath();
+                drawContext.stroke();
+            }
+
+            oldMousex = mousex;
+            oldMousey = mousey;
+        }
+
+        function init() {
+            textElem = document.getElementById("userText");
+            canvasElem = document.getElementById("boardCanvas");
+            canvasElem.height = window.innerHeight - 100;
+            canvasElem.width = window.innerWidth - 50;
+            canvasElem.style.backgroundColor = boardColour;
+            drawContext = canvasElem.getContext("2d");
+            drawContext.lineWidth = markerSize;
+            drawContext.lineCap = "round";
+            drawContext.font = font;
+            drawContext.fillStyle = defaultMarkerColour;
+        }
+
+        function initEvents() {
+            canvasElem.addEventListener("mousedown", (event) => { mouseBtnDown = true; });
+            canvasElem.addEventListener("mouseup", (event) => { mouseBtnDown = false; });
+            canvasElem.addEventListener("mousemove", (event) => {
+                mousex = event.offsetX;
+                mousey = event.offsetY;
+            });
+            canvasElem.addEventListener("click", (event) => { if (isText) drawText(); });
+
+            const defaultMarkerBtn = document.getElementById("defaultMarkerButton")
+            const redMarkerBtn = document.getElementById("redMarkerButton");
+            const greenMarkerBtn = document.getElementById("greenMarkerButton");
+            const blueMarkerBtn = document.getElementById("blueMarkerButton");
+            const eraserBtn = document.getElementById("eraserButton");
+            const textButton = document.getElementById("textButton");
+
+            defaultMarkerBtn.addEventListener("click", (event) => { isText = false; useDefaultMarker() });
+            redMarkerBtn.addEventListener("click", (event) => { isText = false; useRedMarker() });
+            greenMarkerBtn.addEventListener("click", (event) => { isText = false; useGreenMarker() });
+            blueMarkerBtn.addEventListener("click", (event) => { isText = false; useBlueMarker() });
+            eraserBtn.addEventListener("click", (event) => { isText = false; useEraser() });
+            textButton.addEventListener("click", (event) => { isText = true; });
+        }
+
+        function initRendering() {
+            setInterval(() => { draw() }, interval);
+        }
+
+        document.addEventListener("DOMContentLoaded", (event) => {
+            init();
+            initEvents();
+            initRendering();
+        });
+    </script>
+</head>
+
+<body>
+    <div class="buttonArea">
+        <button id="defaultMarkerButton">Default</button>
+        <button id="redMarkerButton">Red Pen</button>
+        <button id="greenMarkerButton">Green Pen</button>
+        <button id="blueMarkerButton">Blue Pen</button>
+        <button id="eraserButton">Eraser</button>
+        <button id="textButton">Text</button>
+        <textarea id="userText"></textarea>
+    </div>
+    <div class="canvasDiv">
+        <canvas class="mainCanvas" id="boardCanvas"></canvas>
+    </div>
+</body>
+
+</html>
