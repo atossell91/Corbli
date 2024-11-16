@@ -1,5 +1,5 @@
 @{
-    Layout = "";
+    Layout = "_Layout-Canvas";
 }
 
 <!DOCTYPE html>
@@ -10,8 +10,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
+
+        .pageMain {
+            display: flex;
+            flex-direction:column;
+        }
+
         .canvasDiv {
-            background: transparent;
+            background: transparent ;
         }
 
         .mainCanvas {
@@ -19,9 +25,14 @@
         }
 
         .buttonArea {
+            margin: 0px 0px 20px 0px;
             display: flexbox;
             flex-direction: row;
             height: 50px;
+        }
+
+        .userText {
+            resize: horizontal;
         }
     </style>
 
@@ -108,8 +119,15 @@
         function init() {
             textElem = document.getElementById("userText");
             canvasElem = document.getElementById("boardCanvas");
-            canvasElem.height = window.innerHeight - 100;
-            canvasElem.width = window.innerWidth - 50;
+            
+            const canvasDiv = document.getElementById("canvasDiv");
+            const headerElem = document.getElementById("buttonArea");
+            const footerElem = document.getElementsByTagName("footer")[0];
+
+            const vSpace = (footerElem.offsetTop) - (headerElem.offsetHeight + headerElem.offsetTop);
+
+            canvasElem.height = vSpace - 50;
+            canvasElem.width = canvasDiv.offsetWidth;
             canvasElem.style.backgroundColor = boardColour;
             drawContext = canvasElem.getContext("2d");
             drawContext.lineWidth = markerSize;
@@ -154,17 +172,17 @@
     </script>
 </head>
 
-<body>
-    <div class="buttonArea">
+<body class="pageMain">
+    <div class="buttonArea" id="buttonArea">
         <button id="defaultMarkerButton">Default</button>
         <button id="redMarkerButton">Red Pen</button>
         <button id="greenMarkerButton">Green Pen</button>
         <button id="blueMarkerButton">Blue Pen</button>
         <button id="eraserButton">Eraser</button>
         <button id="textButton">Text</button>
-        <textarea id="userText"></textarea>
+        <textarea id="userText" class="userText"></textarea>
     </div>
-    <div class="canvasDiv">
+    <div class="canvasDiv" id="canvasDiv">
         <canvas class="mainCanvas" id="boardCanvas"></canvas>
     </div>
 </body>
