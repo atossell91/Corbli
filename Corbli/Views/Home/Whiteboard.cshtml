@@ -42,6 +42,9 @@
         const markerSize = 4;
         const eraserSize = 80;
 
+        let canvasHeight = 0;
+        let canvasWidth = 0;
+
         //  Change to true for an uber-cool neon mode!
         const isNeonMode = true;
 
@@ -99,6 +102,13 @@
             drawContext.fillText(textElem.value, mousex, mousey);
         }
 
+        function clearBoard() {
+            const fillColour = drawContext.fillStyle;
+            drawContext.fillStyle = boardColour;
+            drawContext.fillRect(0, 0, canvasWidth, canvasHeight);
+            drawContext.fillStyle = fillColour;
+        }
+
         function draw() {
             if (mousex == oldMousex && mousey == oldMousey) {
                 return;
@@ -126,19 +136,24 @@
 
             const vSpace = (footerElem.offsetTop) - (headerElem.offsetHeight + headerElem.offsetTop);
 
-            canvasElem.height = vSpace - 50;
-            canvasElem.width = canvasDiv.offsetWidth;
+            canvasHeight = vSpace - 50;
+            canvasWidth = canvasDiv.offsetWidth;
+
+            canvasElem.height = canvasHeight;
+            canvasElem.width = canvasWidth;
             canvasElem.style.backgroundColor = boardColour;
             drawContext = canvasElem.getContext("2d");
             drawContext.lineWidth = markerSize;
             drawContext.lineCap = "round";
             drawContext.font = font;
             drawContext.fillStyle = defaultMarkerColour;
+
+            clearBoard();
         }
 
         function initEvents() {
-            canvasElem.addEventListener("mousedown", (event) => { mouseBtnDown = true; });
-            canvasElem.addEventListener("mouseup", (event) => { mouseBtnDown = false; });
+            canvasElem.addEventListener("mousedown", (event) => { if (event.button === 0) mouseBtnDown = true; });
+            canvasElem.addEventListener("mouseup", (event) => { if (event.button === 0) mouseBtnDown = false; });
             canvasElem.addEventListener("mousemove", (event) => {
                 mousex = event.offsetX;
                 mousey = event.offsetY;
@@ -151,6 +166,7 @@
             const blueMarkerBtn = document.getElementById("blueMarkerButton");
             const eraserBtn = document.getElementById("eraserButton");
             const textButton = document.getElementById("textButton");
+            const clearButton = document.getElementById("clearButton");
 
             defaultMarkerBtn.addEventListener("click", (event) => { isText = false; useDefaultMarker() });
             redMarkerBtn.addEventListener("click", (event) => { isText = false; useRedMarker() });
@@ -158,6 +174,7 @@
             blueMarkerBtn.addEventListener("click", (event) => { isText = false; useBlueMarker() });
             eraserBtn.addEventListener("click", (event) => { isText = false; useEraser() });
             textButton.addEventListener("click", (event) => { isText = true; });
+            clearButton.addEventListener("click", (event) => { clearBoard(); });
         }
 
         function initRendering() {
@@ -181,6 +198,7 @@
         <button id="eraserButton">Eraser</button>
         <button id="textButton">Text</button>
         <textarea id="userText" class="userText"></textarea>
+        <button id="clearButton">Clear</button>
     </div>
     <div class="canvasDiv" id="canvasDiv">
         <canvas class="mainCanvas" id="boardCanvas"></canvas>

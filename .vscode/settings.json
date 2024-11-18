@@ -1,0 +1,8 @@
+{
+    "[razor]": {
+        "editor.acceptSuggestionOnCommitCharacter": false,
+        "editor.acceptSuggestionOnSpace": false,
+        "editor.suggestOnTriggerCharacters": false
+    },
+    "editor.acceptSuggestionOnCommitCharacter": false
+}
